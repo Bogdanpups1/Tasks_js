@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 02</title>
+</head>
+
+<body>
+    <script>
+        /*
+        Задание:
+        Напишите сценарий, который будет обновлять сущность post со свойствами
+        id: 1,
+        title: 'foo',
+        body: 'bar',
+        userId: 1,
+
+        Создайте форму с полем ввода для значения свойства title и полем ввода для значения свойства body
+
+        Значения для свойств title и body получите от пользователя
+        Значения id и userId должны остаться равными 1 и выводить их в форме не нужно.
+        При загрузке сценария заполните форму данными получеными при обработке GET запроса на https://jsonplaceholder.typicode.com/posts/1
+
+        адрес для отправки запроса
+        https://jsonplaceholder.typicode.com/posts/1
+
+        для обновления сущности воспользуйтесь PUT запросом https://jsonplaceholder.typicode.com/posts/1. Обработайте ответ
+        и выведите информацию о ошибке или об успешно завершенной операции.
+        */
+
+        let button = document.querySelector("button");
+        let output = document.querySelector("#output");
+        let title = document.getElementById("inp1");
+        let body = document.getElementById("inp2");
+        let url = " https://jsonplaceholder.typicode.com/posts/1";
+
+        fetch(url)
+            .then((response) => response.json())
+            .then(data => {
+                title.value = data.title;
+                body.value = data.body;
+            })
+
+        button.addEventListener("click", function () {
+            let form = {
+                id: 1,
+                title: title.value,
+                body: body.value,
+                userId: 1,
+            }
+            fetch(url, {
+                method: 'PUT',
+                body: JSON.stringify(form),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+                .then(response => response.json())      
+                .then(data => {
+                    output.innerHTML = "Data updated!<br>" + JSON.stringify(data);
+                })
+                .catch(error => {
+                    output.innerHTML = "Error: " + error;
+                });
+        })
+    </script>
+</body>
+
+</html>
